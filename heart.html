@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>爱心魔法</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        /* 主爱心 - 心跳动画 */
+        .heart {
+            font-size: 100px;
+            cursor: pointer;
+            animation: heartbeat 1.2s ease-in-out infinite;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 5px 15px rgba(255, 105, 180, 0.4));
+        }
+        
+        /* 点击时的效果 */
+        .heart:active {
+            transform: scale(0.9);
+        }
+        
+        /* 心跳动画 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        
+        /* 飞出的爱心动画 */
+        .flying-heart {
+            position: fixed;
+            font-size: 40px;
+            animation: fly 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        @keyframes fly {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        h2 {
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 0 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* 背景漂浮爱心 */
+        .bg-heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰爱心 -->
+    <div class="bg-heart" style="top:10%; left:10%; animation-delay:0s;">💕</div>
+    <div class="bg-heart" style="top:20%; right:15%; animation-delay:2s;">💖</div>
+    <div class="bg-heart" style="bottom:20%; left:20%; animation-delay:4s;">💗</div>
+    <div class="bg-heart" style="bottom:10%; right:10%; animation-delay:1s;">💝</div>
+    
+    <h2>点击爱心释放魔法</h2>
+    <div class="heart" onclick="releaseHearts()">❤️</div>
+    
+    <script>
+        function releaseHearts() {
+            // 创建8个飞散的爱心
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'flying-heart';
+                
+                // 计算随机方向
+                const angle = (i * 45) * Math.PI / 180; // 每个爱心间隔45度
+                const distance = 150 + Math.random() * 100; // 随机距离
+                
+                // 设置CSS变量控制飞行方向
+                heart.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+                heart.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+                
+                // 位置在屏幕中心
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                
+                // 随机动画延迟
+                heart.style.animationDelay = (i * 0.1) + 's';
+                
+                document.body.appendChild(heart);
+                
+                // 2秒后移除
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        document.body.removeChild(heart);
+                    }
+                }, 2200);
+            }
+        }
+    </script>
+</body>
+</html>
